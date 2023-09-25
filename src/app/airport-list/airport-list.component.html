@@ -1,0 +1,116 @@
+<div class="container-fluid">
+    <table class="table table-light">
+        <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>CODE</th>
+                <th>CITY</th>
+                <th>COUNTRY</th>
+                <th>ACTION</th>
+                <th>    
+                    <button type="button" class="btn btn-info btn-lg" (click)="openModal()">ADD</button>
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let a of airports">
+                <td>{{a.id}}</td>
+                <td>{{a.code}}</td>
+                <td>{{a.city}}</td>
+                <td>{{a.country}}</td>
+                <td>
+                    <button class="btn btn-warning" style="margin-right: 5px;" (click)="openEditModal(a.id)" >EDIT</button>
+                    <button class="btn btn-danger" (click)="deleteAirport(a.id)">DELETE</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':display}">
+    <div class="modal-dialog" role="document">
+          <div class="modal-content">
+                <div class="modal-header">
+                      <h4 class="modal-title">Add New Airport</h4>
+                      <button type="button" class="close" aria-label="Close" (click)="onCloseHandled()"><span aria-hidden="true">&times;</span></button>
+                    </div>
+           <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="Code">Code</label>
+                                        <input [(ngModel)]="crAirport.code" id="Code" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="City">City</label>
+                                        <input [(ngModel)]="crAirport.city" id="City" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Country">Country</label>
+                                        <input [(ngModel)]="crAirport.country" id="Country" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group" (click)="saveAirport()">
+                                        <button class="btn btn-primary">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-footer" *ngIf="showAlert">
+                                    <div class="alert alert-success" role="alert">
+                                        <button class="close" (click)="closeAlert()">&times;</button>
+                                        <strong>Successfully Saved</strong>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+       </div>
+        </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':editDisplay}">
+    <div class="modal-dialog" role="document">
+          <div class="modal-content">
+                <div class="modal-header">
+                      <h4 class="modal-title">Edit Airport</h4>
+                      <button type="button" class="close" aria-label="Close" (click)="onCloseHandledEdit()"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="Code">Code</label>
+                                        <input [(ngModel)]="edAirport.code" id="Code" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="City">City</label>
+                                        <input [(ngModel)]="edAirport.city" id="City" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Country">Country</label>
+                                        <input [(ngModel)]="edAirport.country" id="Country" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group" (click)="editAirport()">
+                                        <button class="btn btn-primary">
+                                            Edit
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-footer" *ngIf="showEditAlert">
+                                    <div class="alert alert-success" role="alert">
+                                        <button class="close" (click)="closeEditAlert()">&times;</button>
+                                        <strong>Successfully Edited</strong>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+           <div class="modal-body">
+
+                    </div>
+       </div>
+        </div>
+</div>
