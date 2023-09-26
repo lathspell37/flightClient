@@ -7,11 +7,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { AirportListComponent } from './airport-list/airport-list.component'
 import { AirportService } from './airport/airport.service';
 import { FormsModule } from '@angular/forms';
+import { AirportFilterPipePipe } from './airport-filter-pipe.pipe';
+import { RoutesListComponent } from './routes-list/routes-list.component';
+import { RoutesService } from './routes/routes.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AirportListComponent
+    AirportListComponent,
+    AirportFilterPipePipe,
+    RoutesListComponent
   ],
   imports: [
     BrowserModule,
@@ -20,7 +25,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule
 
   ],
-  providers: [AirportService],
+  providers: [AirportService, RoutesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

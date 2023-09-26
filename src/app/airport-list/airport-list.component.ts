@@ -8,6 +8,7 @@ import { AirportService } from '../airport/airport.service';
   styleUrls: ['./airport-list.component.css'],
 })
 export class AirportListComponent {
+  
   display = "none";
   editDisplay="none";
   airports: Airport[]
@@ -15,14 +16,19 @@ export class AirportListComponent {
   edAirport = new Airport();
   showAlert=false;
   showEditAlert=false;
+  searchText: ""
   constructor(private airportService:AirportService){}
 
   ngOnInit(){
 
+    this.getAllAirportLise()
+
+  }
+
+  getAllAirportLise(){
     this.airportService.getAllAirportList().subscribe((response: any) => {
       this.airports=response;
     })
-
   }
 
   openModal() {
@@ -46,6 +52,8 @@ export class AirportListComponent {
       console.log(response);
       this.crAirport = new Airport();
       this.showAlert=true;
+      this.onCloseHandled();
+      this.getAllAirportLise();
     })
   }
 
@@ -54,6 +62,8 @@ export class AirportListComponent {
       this.airportService.updateAirport(this.edAirport, this.edAirport.id).subscribe((response)=>{        
         this.edAirport=new Airport();
         this.showEditAlert=true;
+        this.getAllAirportLise();
+        this.onCloseHandledEdit()
       })
     }
 
@@ -61,9 +71,7 @@ export class AirportListComponent {
 
   deleteAirport(id: number= -1){
     this.airportService.deleteAirport(id).subscribe((response)=>{
-      this.airports = this.airports.filter((e: any) => {
-        return id!=e.id;
-      })
+      this.getAllAirportLise();
     })
   }
 

@@ -1,14 +1,11 @@
 <div class="container-fluid">
-
-    <input [(ngModel)]="searchText" type="search" class="form-control" placeholder="Search City" style="width: 50%; margin: 10px auto;">
     <table class="table table-light">
         <thead class="thead-light">
             <tr>
                 <th>ID</th>
-                <th>CODE</th>
-                <th>CITY</th>
-                <th>COUNTRY</th>
-                <th>ACTION</th>
+                <th>SOURCE</th>
+                <th>DESTINATION</th>
+                <th>DISTANCE</th>                
                 <th>    
                     <button type="button" class="btn btn-info btn-lg" (click)="openModal()">ADD</button>
                 </th>
@@ -16,14 +13,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let a of airports | airportFilterPipe:searchText">
+            <tr *ngFor="let a of routes">
                 <td>{{a.id}}</td>
-                <td>{{a.code}}</td>
-                <td>{{a.city}}</td>
-                <td>{{a.country}}</td>
+                <td>{{a.source?.city}}</td>
+                <td>{{a.destination?.city}}</td>
+                <td>{{a.distance}}</td>
                 <td>
-                    <button class="btn btn-warning" style="margin-right: 5px;" (click)="openEditModal(a.id)" >EDIT</button>
-                    <button class="btn btn-danger" (click)="deleteAirport(a.id)">DELETE</button>
+                    <button class="btn btn-warning" style="margin-right: 5px;" (click)="openEditModal(a.id)">EDIT</button>
+                    <button class="btn btn-danger" (click)="deleteRoute(a.id)" >DELETE</button>
                 </td>
             </tr>
         </tbody>
@@ -34,7 +31,7 @@
     <div class="modal-dialog" role="document">
           <div class="modal-content">
                 <div class="modal-header">
-                      <h4 class="modal-title">Add New Airport</h4>
+                      <h4 class="modal-title">Add New Route</h4>
                       <button type="button" class="close" aria-label="Close" (click)="onCloseHandled()"><span aria-hidden="true">&times;</span></button>
                     </div>
            <div class="modal-body">
@@ -42,18 +39,22 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="Code">Code</label>
-                                        <input [(ngModel)]="crAirport.code" id="Code" class="form-control" type="text">
+                                        <label for="Source City">Source City</label>
+                                        <select class="form-control" (change)="onDropSelectSource(a.value)" #a>
+                                            <option *ngFor="let a of airport" [value]="a.id">{{a.city}}</option>
+                                        </select>                                        
                                     </div>
                                     <div class="form-group">
-                                        <label for="City">City</label>
-                                        <input [(ngModel)]="crAirport.city" id="City" class="form-control" type="text">
+                                        <label for="Destination City">Destination City</label>
+                                        <select class="form-control" (change)="onDropSelectDest(b.value)" #b>
+                                            <option *ngFor="let b of airport" [value]="b.id">{{b.city}}</option>
+                                        </select>   
                                     </div>
                                     <div class="form-group">
-                                        <label for="Country">Country</label>
-                                        <input [(ngModel)]="crAirport.country" id="Country" class="form-control" type="text">
+                                        <label for="Distance">Distance</label>
+                                        <input  id="Distance" class="form-control" type="number" [(ngModel)]="crRoutes.distance" >
                                     </div>
-                                    <div class="form-group" (click)="saveAirport()">
+                                    <div class="form-group" (click)="saveRoutes()">
                                         <button class="btn btn-primary">
                                             Save
                                         </button>
@@ -72,46 +73,47 @@
         </div>
 </div>
 
-<div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':editDisplay}">
+<div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':displayEdit}">
     <div class="modal-dialog" role="document">
           <div class="modal-content">
                 <div class="modal-header">
-                      <h4 class="modal-title">Edit Airport</h4>
+                      <h4 class="modal-title">Add New Route</h4>
                       <button type="button" class="close" aria-label="Close" (click)="onCloseHandledEdit()"><span aria-hidden="true">&times;</span></button>
                     </div>
-                    <div class="modal-body">
+           <div class="modal-body">
                         <div class="container-fluid">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="Code">Code</label>
-                                        <input [(ngModel)]="edAirport.code" id="Code" class="form-control" type="text">
+                                        <label for="Source City">Source City</label>
+                                        <select class="form-control" (change)="onDropSelectSource(this.sourceId)" [(ngModel)]="this.sourceId">
+                                            <option *ngFor="let a of airport" [value]="a.id">{{a.city}}</option>
+                                        </select>                                        
                                     </div>
                                     <div class="form-group">
-                                        <label for="City">City</label>
-                                        <input [(ngModel)]="edAirport.city" id="City" class="form-control" type="text">
+                                        <label for="Destination City">Destination City</label>
+                                        <select class="form-control" (change)="onDropSelectDest(this.destId)" [(ngModel)]="this.destId">
+                                            <option *ngFor="let b of airport" [value]="b.id">{{b.city}}</option>
+                                        </select>   
                                     </div>
                                     <div class="form-group">
-                                        <label for="Country">Country</label>
-                                        <input [(ngModel)]="edAirport.country" id="Country" class="form-control" type="text">
+                                        <label for="Distance">Distance</label>
+                                        <input  id="Distance" class="form-control" type="number" [(ngModel)]="edRoutes.distance" >
                                     </div>
-                                    <div class="form-group" (click)="editAirport()">
+                                    <div class="form-group" (click)="editRoutes()">
                                         <button class="btn btn-primary">
-                                            Edit
+                                            Save
                                         </button>
                                     </div>
                                 </div>
                                 <div class="card-footer" *ngIf="showEditAlert">
                                     <div class="alert alert-success" role="alert">
                                         <button class="close" (click)="closeEditAlert()">&times;</button>
-                                        <strong>Successfully Edited</strong>
+                                        <strong>Successfully Saved</strong>
                                     </div>
                                 </div> 
                             </div>
                         </div>
-                    </div>
-           <div class="modal-body">
-
                     </div>
        </div>
         </div>
