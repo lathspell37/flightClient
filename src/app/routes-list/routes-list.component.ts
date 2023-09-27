@@ -82,6 +82,8 @@ export class RoutesListComponent implements OnInit {
     editRoutes(){
       this.routesService.updateRoute(this.edRoutes, this.sourceId, this.destId).subscribe((response)=>{
         console.log(response);
+        this.getAllRoutesLise()
+        this.onCloseHandledEdit();
       })
     }
 

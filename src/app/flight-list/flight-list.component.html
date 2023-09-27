@@ -1,0 +1,157 @@
+<div class="container-fluid">
+    <table class="table table-light">
+        <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>FLIGHT NUMBER</th>
+                <th>SOURCE ROUTE</th>
+                <th>DESTINATION ROUTE</th>
+                <th>PRICE</th>
+                <th>DEPARTURE TIME</th>
+                <th>ARRIVAL TIME</th>
+                <th>CAPACITY</th>
+                <th>STATUS</th>
+                <th>    
+                    <button type="button" class="btn btn-info btn-lg" (click)="openModal()">ADD</button>
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let a of flights">
+                <td>{{a.id}}</td>
+                <td>{{a.flightNumber}}</td>
+                <td>{{a.route?.source?.city}}</td>
+                <td>{{a.route?.destination?.city}}</td>
+                <td>{{a.price}} ₺</td>
+                <td>{{a.departureTime}}</td>
+                <td>{{a.arrivalTime}}</td>
+                <td>{{a.capacity}}</td>
+                <td>{{a.status}}</td>
+                <td>
+                    <button class="btn btn-warning" style="margin-right: 5px;" (click)="editFlightModal(a.id)">EDIT</button>
+                    <button class="btn btn-danger" (click)="deleteFLight(a.id)">DELETE</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':display}">
+    <div class="modal-dialog" role="document">
+          <div class="modal-content">
+                <div class="modal-header">
+                      <h4 class="modal-title">Add New Flight</h4>
+                      <button type="button" class="close" aria-label="Close" (click)="onCloseHandled()"><span aria-hidden="true">&times;</span></button>
+                    </div>
+           <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="flightNumber">Flight Number</label>
+                                        <input [(ngModel)]="crFlight.flightNumber" id="flightNumber" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="route">Route</label>
+                                        <select class="form-control" (change)="onDropSelectSource(a.value)" #a>
+                                            <option *ngFor="let a of routes" [value]="a.id">{{a.source?.city}} to {{a.destination?.city}}</option>
+                                        </select>    
+                                    </div>  
+                                    <div class="form-group">
+                                        <label for="price">Price</label>
+                                        <input [(ngModel)]="crFlight.price" id="price" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="departureTime">Departure Time</label>
+                                        <input type="datetime-local" id="birthdaytime" class="form-control" name="birthdaytime" [(ngModel)]="pickDateTimeDep">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="arrivalTime">Arrival Time</label>
+                                        <input type="datetime-local" id="birthdaytime" class="form-control" name="birthdaytime" [(ngModel)]="pickDateTimeArr">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="capacity">Capacity</label>
+                                        <input [(ngModel)]="crFlight.capacity" id="capacity" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <input [(ngModel)]="crFlight.status" id="status" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group" (click)="saveFlight()">
+                                        <button class="btn btn-primary">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-footer" *ngIf="showAlert">
+                                    <div class="alert alert-success" role="alert">
+                                        <button class="close" (click)="closeAlert()">&times;</button>
+                                        <strong>Successfully Saved</strong>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+       </div>
+        </div>
+</div>
+
+
+<div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':displayEdit}">
+    <div class="modal-dialog" role="document">
+          <div class="modal-content">
+                <div class="modal-header">
+                      <h4 class="modal-title">Edit Flight</h4>
+                      <button type="button" class="close" aria-label="Close" (click)="onCloseHandledEdit()"><span aria-hidden="true">&times;</span></button>
+                    </div>
+           <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="flightNumber">Flight Number</label>
+                                        <input [(ngModel)]="edFlight.flightNumber" id="flightNumber" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="route">Route</label>
+                                        <select class="form-control" (change)="onDropSelectSource(this.sourceCity)" [(ngModel)]="this.sourceCity">
+                                            <option *ngFor="let a of routes" [value]="a.id">{{a.source?.city}} to {{a.destination?.city}}</option>
+                                        </select>    
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Price</label>
+                                        <input [(ngModel)]="edFlight.price" id="price" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="departureTime">Departure Time</label>
+                                        <input type="datetime-local" id="birthdaytime" class="form-control" name="birthdaytime" [(ngModel)]="edFlight.departureTime">                                    </div>
+                                    <div class="form-group">
+                                        <label for="arrivalTime">Arrival Time</label>
+                                        <input type="datetime-local" id="birthdaytime" class="form-control" name="birthdaytime" [(ngModel)]="edFlight.arrivalTime">                                    </div>
+                                    <div class="form-group">
+                                        <label for="capacity">Capacity</label>
+                                        <input [(ngModel)]="edFlight.capacity" id="capacity" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <input [(ngModel)]="edFlight.status" id="status" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group" (click)="editFlight()">
+                                        <button class="btn btn-primary">
+                                            Edit
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-footer" *ngIf="showAlertEdit">
+                                    <div class="alert alert-success" role="alert">
+                                        <button class="close" (click)="closeAlertEdit()">&times;</button>
+                                        <strong>Successfully Saved</strong>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+       </div>
+        </div>
+</div>
